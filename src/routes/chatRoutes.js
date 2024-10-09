@@ -10,11 +10,18 @@ router.post("/room", protect, chatController.createRoom);
 router.post("/rooms/:roomId/messages", protect, chatController.sendMessage);
 
 // Get chat list (all rooms/conversations for the user)
-router.get("/users/:userId/rooms", protect, chatController.getChatList);
+router.get("/users/rooms", protect, chatController.getChatList);
 
 // Get all messages for a specific room
 router.get(
   "/rooms/:roomId/messages",
+  protect,
+  chatController.getMessagesForRoom
+);
+
+// Get all messages for a specific room
+router.get(
+  "/rooms/:roomId/messages/:userId",
   protect,
   chatController.getMessagesForRoom
 );
