@@ -198,6 +198,37 @@ exports.getProfile = async (req, res) => {
   }
 };
 
+// All Users
+exports.allUsers = async (req, res) => {
+  try {
+    // Validate user input
+    const userId = req.user?.id; // Ensure the user is authenticated and ID exists
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
+
+    // Query to fetch user data (ensure index on 'id')
+    const userQuery = `
+      SELECT id, username, email 
+      FROM auth_user 
+      WHERE id != $1
+    `;
+
+    const user = await runQuery(userQuery, [userId]);
+    console.log("user: ", user);
+
+    if (!user || user.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return sanitized user data
+    return res.status(200).json(user);
+  } catch (error) {
+    // logger.error("Error fetching user profile: ", error); // Log the error
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 // Update Profile
 exports.updateProfile = async (req, res) => {
   const { name, email } = req.body;

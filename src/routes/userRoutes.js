@@ -15,5 +15,6 @@ router.post("/logout", userController.logout);
 // Profile routes (protected)
 router.get("/profile", protect, userController.getProfile);
 router.put("/profile", protect, userController.updateProfile);
+router.get("/all", protect, userController.allUsers);
 
 module.exports = router;
